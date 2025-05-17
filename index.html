@@ -241,6 +241,92 @@
         <div class="content has-text-justified">
           <img src="./pictures/VLMbench250512.png" alt="pipeline" class="center">
         </div>
+        <div class="lang-en">
+          <div class="content has-text-justified">
+            <p>
+              We propose a conceptual framework tailored to the domain of urban planning visualization.This framework comprises the following 4 dimensions and 8 categories:
+              <h3 class="title is-5">Perception</h3>
+              The questions of the perception subset consist of 2 categories as follows:<br>
+              <b>Element Recognition</b> evaluates models' ability to identify layout configurations, textual annotations, basic geographic features, and drawing elements in planning maps. It facilitates the establishment of semantic alignment between image content and natural language.
+              <img src="./pictures/table1.png" alt="table1" class="center">
+              <b>Caption</b>，in this study, refers to extracting as many details from the image as possible. The model generates descriptions based solely on the image itself, rather than identifying elements in response to a specific question. The quality of the caption reflects whether the model has truly "seen" the image clearly.<br>
+              Example Question: "Please describe this planning map in detail."
+              <h3 class="title is-5">Reasoning</h3>
+              This dimension encompasses classification, spatial‐relation reasoning, and domain‐specific reasoning. <br>
+              <b>Classification</b> focuses on the ability to recognize different types of planning maps. Based on China's five-level, three-category planning system, the maps are categorized into master plans, detailed plans (including regulatory and site plans), and specialized planning maps.<br>
+              <b>Spatial Relationship Reasoning</b>, as shown in Table 2, assesses the understanding of spatial relationships between geographic elements in planning maps, including: topological spatial relations, sequential spatial relations, and metric spatial relations.
+              <img src="./pictures/table2.png" alt="table2" class="center">
+              <b>Professional Reasoning</b>, which measures mastery of planning knowledge such as layout morphology, functional organization, transportation systems, and environmental ecology, distinct from general logical inference.
+              <h3 class="title is-5">Association</h3>
+              This dimension assesses the ability to collect and relate background policies and contextual documents relevant to planning maps. At a fine scale, it examines policy, regulations, and planning indicators.
+              <h3 class="title is-5">Implementation</h3>
+              This dimension addresses the capacity for comparing, critiquing, and optimizing planning proposals. Given the highly integrative and wide‐ranging nature of urban planning, the ability to identify critical issues and emphasize key priorities is paramount.<br>
+              The questions of the Implementation subset consist of 3 categories as follows:<br>
+              <b>Task Abstraction:</b> This assesses the ability to identify and extract key information from the question text. In the Certified Urban-Rural Planner Qualification Examination, practical questions often include a long background passage containing irrelevant constraints that need to be filtered and summarized.<br>
+              <blockquote>
+                Example Question: “A county currently has a population of 980,000, including 520,000 urban residents. By 2035, the plan aims to increase the urbanization rate to 80%. Three central towns—A, B, and C—and the old district of the county seat will undergo upgrading and renovation. Sixty percent of the population will be relocated to newly built residential areas on the outskirts of the county seat. The plan also includes the development of a food industrial park and rural tourism, as shown in the figure. What are the main issues presented in the map? Please extract the key information from the question.”
+                <br>
+                Example answer: The key points in this question are urbanization rate, central town, population migration, and food industrial park.
+              </blockquote>
+
+              <b>Task-Oriented Image Summarization</b> assesses the ability to identify and extract key information from an image. The image often contains rich information, and some parts are highly relevant to the correct answer and need to be summarized accordingly.<br>
+              
+              <blockquote>
+                Example Question: “Identify the main issues shown in the image.”<br>
+                Example answer: “The main issues in the image include the spatial relationship between Central Town A, the food industrial park, and the floodplain; the topological relationship between the expressway and the nationally protected wetland; the distance between the planned interchange on the west side of the expressway and the existing one; and the overall distribution of central towns.”<br>
+              </blockquote>
+              </p>
+          </div>
+        </div>
+        <div class="lang-zh" style="display: none;">
+          <div class="content has-text-justified">
+            <p>
+              我们提出了一个针对国土空间规划可视化领域的概念框架。该框架包括以下4个维度和8个类别：
+              <h3 class="title is-5">感知</h3>
+              感知子集中的问题包括以下2个类别：<br>
+              <b>元素识别</b>评估模型对布局配置、文本标注、基本地理要素和绘图元素的识别能力。它有助于建立图像内容和自然语言之间的语义对齐。
+              <img src="./pictures/table1.png" alt="table1" class="center">
+              <b>描述</b>，在本研究中，指仅基于图像本身生成描述，而不是根据特定问题对图像进行响应。描述的质量反映了模型是否真正“看到”图像清晰。<br>
+              一个示例问题将是：“请详细描述此规划图。”
+              <h3 class="title is-5">推理</h3>
+              这个维度包括分类、空间关系推理和专业推理。<br>
+              <b>分类</b>关注模型对不同类型的规划图的识别能力。基于中国的五级三级规划体系，规划图被分为主图、详细图（包括法规和站点图）和专业规划图。<br>
+              <b>空间关系推理</b>，如表2所示，评估规划图中地理元素之间的空间关系理解，包括：拓扑空间关系、顺序空间关系和度量空间关系。
+              <img src="./pictures/table2.png" alt="table2" class="center">
+              <b>专业推理</b>，评估对规划知识的掌握，如布局形态、功能组织、交通系统和环境生态，与一般逻辑推理不同。
+              <h3 class="title is-5">关联</h3>
+              该维度评估与规划图相关的背景政策和上下文文件的收集和关联能力。在细微尺度上，它检查政策、法规和规划指标。
+              <h3 class="title is-5">实施</h3>
+              该维度涉及比较、批评和优化规划方案的能力。由于城市规划的高度综合性和广泛性，识别关键问题和强调重点优先事项的能力至关重要。<br>
+              实施子集中的问题包括以下3个类别：<br>
+              <b>任务抽象：</b> 此评估模型对问题文本中的关键信息进行识别和提取的能力。在注册城市规划师执业资格考试实务中，实际问题通常包含一个长背景段落，其中包含需要过滤和总结的无关约束。<br>
+              <blockquote>
+                示例问题：“一个县目前有98万人口，其中52万人为城市居民。到2035年，计划将城市化率提高到80%。三个中心城镇A、B和C以及县城的旧区将进行升级和改造。60%的人口将迁移到县城郊区新建的住宅区。该计划还包括建设食品工业园区和乡村旅游，如图所示。图中主要问题是什么？请提取问题中的关键信息。”
+                <br>
+                示例答案：这个问题的关键点是城市化率、中心城镇、人口迁移和食品工业园区。
+              </blockquote>
+              <b>面向任务的图像摘要</b>评估模型对图像中关键信息的识别和提取能力。图像通常包含丰富的信息，有些部分与正确答案高度相关，需要相应地进行总结。<br>
+              <blockquote>
+                示例问题：“识别图像中显示的主要问题。”<br>
+                示例答案：“图像中的主要问题包括中心城镇A、食品工业园区和洪泛区之间的空间关系；高速公路和国家保护湿地之间的拓扑关系；规划的高速公路西侧互通道与现有互通道之间的距离；以及中心城镇的整体分布。”<br>
+              </blockquote>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <!-- <div class="column is-full-width has-text-centered"> -->
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Performance</h2>
+        <div class="content has-text-justified">
+          <img src="./pictures/radar_image.png" alt="radar_image" class="center">
+        </div>
       </div>
     </div>
   </div>
