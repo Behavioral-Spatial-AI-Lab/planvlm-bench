@@ -1,0 +1,1295 @@
+% llava-cot
+Large language models have demonstrated substantial advancements in reasoning capabilities, particularly through inference-time scaling, as illustrated by models such as OpenAI's o1. However, current Vision-Language Models (VLMs) often struggle to perform systematic and structured reasoning, especially when handling complex visual question-answering tasks. In this work, we introduce LLaVA-CoT, a novel VLM designed to conduct autonomous multistage reasoning. Unlike chain-of-thought prompting, LLaVA-CoT independently engages in sequential stages of summarization, visual interpretation, logical reasoning, and conclusion generation. This structured approach enables LLaVA-CoT to achieve marked improvements in precision on reasoning-intensive tasks. To accomplish this, we compile the LLaVA-CoT-100k dataset, integrating samples from various visual question answering sources and providing structured reasoning annotations. Besides, we propose an inference-time stage-level beam search method, which enables effective inference-time scaling. Remarkably, with only 100k training samples and a simple yet effective inference time scaling method, LLaVA-CoT not only outperforms its base model by 7.4% on a wide range of multimodal reasoning benchmarks, but also surpasses the performance of larger and even closed-source models, such as Gemini-1.5-pro, GPT-4o-mini, and Llama-3.2-90B-Vision-Instruct.
+@misc{xu2025llavacot,
+      title={LLaVA-CoT: Let Vision Language Models Reason Step-by-Step}, 
+      author={Guowei Xu and Peng Jin and Hao Li and Yibing Song and Lichao Sun and Li Yuan},
+      year={2025},
+      eprint={2411.10440},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2411.10440}, 
+}
+
+@misc{xu2025llavacot,
+  title={LLaVA-CoT: Let Vision Language Models Reason Step-by-Step}, 
+  author={Guowei Xu and Peng Jin and Hao Li and Yibing Song and Lichao Sun and Li Yuan},
+  year={2025},
+  eprint={2411.10440},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2411.10440}
+}
+
+@misc{bai2025qwen25vltechnicalreport,
+  title={Qwen2.5-VL Technical Report}, 
+  author={Shuai Bai and Keqin Chen and Xuejing Liu and Jialin Wang and Wenbin Ge and Sibo Song and Kai Dang and Peng Wang and Shijie Wang and Jun Tang and Humen Zhong and Yuanzhi Zhu and Mingkun Yang and Zhaohai Li and Jianqiang Wan and Pengfei Wang and Wei Ding and Zheren Fu and Yiheng Xu and Jiabo Ye and Xi Zhang and Tianbao Xie and Zesen Cheng and Hang Zhang and Zhibo Yang and Haiyang Xu and Junyang Lin},
+  year={2025},
+  eprint={2502.13923},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2502.13923}
+}
+
+@misc{liu2025synthvlmhighefficiencyhighqualitysynthetic,
+  title={SynthVLM: High-Efficiency and High-Quality Synthetic Data for Vision Language Models}, 
+  author={Zheng Liu and Hao Liang and Bozhou Li and Tianyi Bai and Wentao Xiong and Chong Chen and Conghui He and Wentao Zhang and Bin Cui},
+  year={2025},
+  eprint={2407.20756},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2407.20756}
+}
+
+@misc{cai2024vipllavamakinglargemultimodal,
+  title={ViP-LLaVA: Making Large Multimodal Models Understand Arbitrary Visual Prompts}, 
+  author={Mu Cai and Haotian Liu and Dennis Park and Siva Karthik Mustikovela and Gregory P. Meyer and Yuning Chai and Yong Jae Lee},
+  year={2024},
+  eprint={2312.00784},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2312.00784}
+}
+
+@book{harley2002new,
+  title={The new nature of maps: essays in the history of cartography},
+  author={Harley, John Brian},
+  number={2002},
+  year={2002},
+  publisher={JHU Press}
+}
+
+@book{alexander1977pattern,
+  title={A pattern language: towns, buildings, construction},
+  author={Alexander, Christopher},
+  year={1977},
+  publisher={Oxford university press}
+}
+
+@misc{arnheim1969visual,
+  title={Visual Thinking, Univ},
+  author={Arnheim, Rudolf},
+  year={1969},
+  publisher={of California Press}
+}
+
+@article{harley1989deconstructing,
+  title={Deconstructing the map},
+  author={Harley, John Brian},
+  journal={Cartographica: The international journal for geographic information and geovisualization},
+  volume={26},
+  number={2},
+  pages={1--20},
+  year={1989},
+  publisher={University of Toronto Press}
+}
+
+@incollection{pickles2013texts,
+  title={Texts, hermeneutics and propaganda maps},
+  author={Pickles, John},
+  booktitle={Writing worlds},
+  pages={193--230},
+  year={2013},
+  publisher={Routledge}
+}
+
+@book{bertin1983semiology,
+  title={Semiology of graphics},
+  author={Bertin, Jacques},
+  year={1983},
+  publisher={University of Wisconsin press}
+}
+
+@article{moroni2017graphic,
+  title={Graphic rules in planning: A critical exploration of normative drawings starting from zoning maps and form-based codes},
+  author={Moroni, Stefano and Lorini, Giuseppe},
+  journal={Planning Theory},
+  volume={16},
+  number={3},
+  pages={318--338},
+  year={2017},
+  publisher={SAGE Publications Sage UK: London, England}
+}
+
+@book{Lynch1984,
+  title={Site Planning},
+  author={Lynch, Kevin and Hack, Gary},
+  year={1984},
+  publisher={MIT Press},
+  address={Cambridge, MA}
+}
+
+@article{Steinitz1995,
+  title={A Framework for Planning Practice and Education},
+  author={Steinitz, Carl},
+  journal={Landscape and Urban Planning},
+  volume={32},
+  number={3},
+  pages={173-195},
+  year={1995},
+  publisher={Elsevier}
+}
+
+@book{Healey1997,
+  title={Collaborative Planning: Shaping Places in Fragmented Societies},
+  author={Healey, Patsy},
+  year={1997},
+  publisher={Macmillan},
+  address={London}
+}
+
+@article{Forester1982,
+  title={Planning in the Face of Power},
+  author={Forester, John},
+  journal={Journal of the American Planning Association},
+  volume={48},
+  number={1},
+  pages={67-80},
+  year={1982},
+  publisher={Taylor \& Francis}
+}
+
+
+@misc{wang2024qwen2vl,
+      title={Qwen2-VL: Enhancing Vision-Language Model's Perception of the World at Any Resolution}, 
+      author={Peng Wang and Shuai Bai and Sinan Tan and Shijie Wang and Zhihao Fan and Jinze Bai and Keqin Chen and Xuejing Liu and Jialin Wang and Wenbin Ge and Yang Fan and Kai Dang and Mengfei Du and Xuancheng Ren and Rui Men and Dayiheng Liu and Chang Zhou and Jingren Zhou and Junyang Lin},
+      year={2024},
+      eprint={2409.12191},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2409.12191}, 
+}
+
+
+@inproceedings{reimers2019sentence,
+    title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+    author={Reimers, Nils and Gurevych, Iryna},
+    booktitle={Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)},
+    pages={3982--3992},
+    year={2019},
+    publisher={Association for Computational Linguistics},
+    url={https://aclanthology.org/D19-1410/}
+}
+
+
+
+@misc{openai2021clip,
+    title={CLIP-ViT-Base-Patch32},
+    author={OpenAI},
+    year={2021},
+    howpublished={\url{https://huggingface.co/openai/clip-vit-base-patch32}},
+    note={Accessed: [您访问的日期]}
+}
+
+
+
+
+
+@misc{karamcheti2024prismaticvlmsinvestigatingdesign,
+      title={Prismatic VLMs: Investigating the Design Space of Visually-Conditioned Language Models}, 
+      author={Siddharth Karamcheti and Suraj Nair and Ashwin Balakrishna and Percy Liang and Thomas Kollar and Dorsa Sadigh},
+      year={2024},
+      eprint={2402.07865},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2402.07865}, 
+}
+
+
+@article{Talen2000,
+  title={Bottom-Up GIS: A New Tool for Individual and Group Expression in Participatory Planning},
+  author={Talen, Emily},
+  journal={Journal of the American Planning Association},
+  volume={66},
+  number={3},
+  pages={279-294},
+  year={2000},
+  publisher={Taylor \& Francis}
+}
+
+@book{Alexander1979,
+  title={The Timeless Way of Building},
+  author={Alexander, Christopher},
+  year={1979},
+  publisher={Oxford University Press},
+  address={New York}
+}
+
+@book{Faludi1987,
+  title={A Decision-Centred View of Environmental Planning},
+  author={Faludi, Andreas},
+  year={1987},
+  publisher={Pergamon Press},
+  address={Oxford}
+}
+
+@book{Hall1996,
+  title={Cities of Tomorrow: An Intellectual History of Urban Planning and Design in the Twentieth Century},
+  author={Hall, Peter},
+  year={1996},
+  publisher={Blackwell Publishers},
+  address={Oxford}
+}
+
+@book{Campbell2003,
+  title={Green Cities, Growing Cities, Just Cities? Urban Planning and the Contradictions of Sustainable Development},
+  author={Campbell, Scott},
+  journal={Journal of the American Planning Association},
+  volume={62},
+  number={3},
+  pages={296-312},
+  year={2003},
+  publisher={Taylor \& Francis}
+}
+
+
+@misc{bai2025qwen25vl,
+      title={Qwen2.5-VL Technical Report}, 
+      author={Shuai Bai and Keqin Chen and Xuejing Liu and Jialin Wang and Wenbin Ge and Sibo Song and Kai Dang and Peng Wang and Shijie Wang and Jun Tang and Humen Zhong and Yuanzhi Zhu and Mingkun Yang and Zhaohai Li and Jianqiang Wan and Pengfei Wang and Wei Ding and Zheren Fu and Yiheng Xu and Jiabo Ye and Xi Zhang and Tianbao Xie and Zesen Cheng and Hang Zhang and Zhibo Yang and Haiyang Xu and Junyang Lin},
+      year={2025},
+      eprint={2502.13923},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2502.13923}, 
+}
+s
+
+@misc{liu2023llava,
+      title={Visual Instruction Tuning}, 
+      author={Haotian Liu and Chunyuan Li and Qingyang Wu and Yong Jae Lee},
+      year={2023},
+      eprint={2304.08485},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2304.08485}, 
+}
+
+
+Vision-Language Models (VLMs) have recently emerged, demonstrating remarkable vision-understanding capabilities. However, training these models requires large-scale datasets, which brings challenges related to efficiency, effectiveness, quality, and privacy of web data. In this paper, we introduce SynthVLM, a novel data synthesis and curation method for generating image-caption pairs. Unlike traditional methods, where captions are generated from images, SynthVLM utilizes advanced diffusion models and high-quality captions to automatically synthesize and select high-resolution images from text descriptions, thereby creating precisely aligned image-text pairs. To demonstrate the power of SynthVLM, we introduce SynthVLM-100K, a high-quality dataset consisting of 100,000 curated and synthesized image-caption pairs. In both model and human evaluations, SynthVLM-100K outperforms traditional real-world datasets. Leveraging this dataset, we develop a new family of multimodal large language models (MLLMs), SynthVLM-7B and SynthVLM-13B, which achieve state-of-the-art (SOTA) performance on various vision question-answering (VQA) tasks. Notably, our models outperform LLaVA across most metrics with only 18\% pretrain data. Furthermore, SynthVLM-7B and SynthVLM-13B attain SOTA performance on the MMLU benchmark, demonstrating that the high-quality SynthVLM-100K dataset preserves language abilities. To facilitate future research, our dataset and the complete data generating and curating methods are open-sourced at this https URL.
+
+While existing large vision-language multimodal models focus on whole image understanding, there is a prominent gap in achieving region-specific comprehension. Current approaches that use textual coordinates or spatial encodings often fail to provide a user-friendly interface for visual prompting. To address this challenge, we introduce a novel multimodal model capable of decoding arbitrary visual prompts. This allows users to intuitively mark images and interact with the model using natural cues like a "red bounding box" or "pointed arrow". Our simple design directly overlays visual markers onto the RGB image, eliminating the need for complex region encodings, yet achieves state-of-the-art performance on region-understanding tasks like Visual7W, PointQA, and Visual Commonsense Reasoning benchmark. Furthermore, we present ViP-Bench, a comprehensive benchmark to assess the capability of models in understanding visual prompts across multiple dimensions, enabling future research in this domain. Code, data, and model are publicly available.
+
+
+@article{huatuo,
+  title={Huatuo: Tuning llama model with chinese medical knowledge},
+  author={Wang, Haochun and Liu, Chi and Xi, Nuwa and Qiang, Zewen and Zhao, Sendong and Qin, Bing and Liu, Ting},
+  journal={arXiv preprint arXiv:2304.06975},
+  year={2023}
+}
+
+@misc{kwon2023efficient,
+      title={Efficient Memory Management for Large Language Model Serving with PagedAttention}, 
+      author={Woosuk Kwon and Zhuohan Li and Siyuan Zhuang and Ying Sheng and Lianmin Zheng and Cody Hao Yu and Joseph E. Gonzalez and Hao Zhang and Ion Stoica},
+      year={2023},
+      eprint={2309.06180},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+@misc{loshchilov2019decoupled,
+      title={Decoupled Weight Decay Regularization}, 
+      author={Ilya Loshchilov and Frank Hutter},
+      year={2019},
+      eprint={1711.05101},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+
+@article{earthgpt,
+  title={Earthgpt: A universal multi-modal large language model for multi-sensor image comprehension in remote sensing domain},
+  author={Zhang, Wei and Cai, Miaoxin and Zhang, Tong and Zhuang, Yin and Mao, Xuerui},
+  journal={arXiv preprint arXiv:2401.16822},
+  year={2024}
+}
+@article{flashattention,
+  title={Flashattention-2: Faster attention with better parallelism and work partitioning},
+  author={Dao, Tri},
+  journal={arXiv preprint arXiv:2307.08691},
+  year={2023}
+}
+
+@inproceedings{deepspeed,
+  title={DeepSpeed-inference: enabling efficient inference of transformer models at unprecedented scale},
+  author={Aminabadi, Reza Yazdani and Rajbhandari, Samyam and Awan, Ammar Ahmad and Li, Cheng and Li, Du and Zheng, Elton and Ruwase, Olatunji and Smith, Shaden and Zhang, Minjia and Rasley, Jeff and others},
+  booktitle={SC22: International Conference for High Performance Computing, Networking, Storage and Analysis},
+  pages={1--15},
+  year={2022},
+  organization={IEEE}
+}
+
+
+@article{oord2018representation,
+  title={Representation learning with contrastive predictive coding},
+  author={Oord, Aaron van den and Li, Yazhe and Vinyals, Oriol},
+  journal={arXiv preprint arXiv:1807.03748},
+  year={2018}
+}
+
+@inproceedings{snli:emnlp2015, Author = {Bowman, Samuel R. and Angeli, Gabor and Potts, Christopher and Manning, Christopher D.}, Booktitle = {Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing (EMNLP)}, Publisher = {Association for Computational Linguistics}, Title = {A large annotated corpus for learning natural language inference}, Year = {2015} } 
+
+@misc{eval-harness,
+  author       = {Gao, Leo and Tow, Jonathan and Abbasi, Baber and Biderman, Stella and Black, Sid and DiPofi, Anthony and Foster, Charles and Golding, Laurence and Hsu, Jeffrey and Le Noac'h, Alain and Li, Haonan and McDonell, Kyle and Muennighoff, Niklas and Ociepa, Chris and Phang, Jason and Reynolds, Laria and Schoelkopf, Hailey and Skowron, Aviya and Sutawika, Lintang and Tang, Eric and Thite, Anish and Wang, Ben and Wang, Kevin and Zou, Andy},
+  title        = {A framework for few-shot language model evaluation},
+  month        = 12,
+  year         = 2023,
+  publisher    = {Zenodo},
+  version      = {v0.4.0},
+  doi          = {10.5281/zenodo.10256836},
+  url          = {https://zenodo.org/records/10256836}
+}
+@article{DBLP:journals/corr/abs-1908-11828,
+  author       = {Yinfei Yang and
+                  Yuan Zhang and
+                  Chris Tar and
+                  Jason Baldridge},
+  title        = {{PAWS-X:} {A} Cross-lingual Adversarial Dataset for Paraphrase Identification},
+  journal      = {CoRR},
+  volume       = {abs/1908.11828},
+  year         = {2019},
+  url          = {http://arxiv.org/abs/1908.11828},
+  eprinttype    = {arXiv},
+  eprint       = {1908.11828},
+  timestamp    = {Wed, 04 Sep 2019 15:47:27 +0200},
+  biburl       = {https://dblp.org/rec/journals/corr/abs-1908-11828.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{huang2023ceval,
+title={C-Eval: A Multi-Level Multi-Discipline Chinese Evaluation Suite for Foundation Models},
+author={Huang, Yuzhen and Bai, Yuzhuo and Zhu, Zhihao and Zhang, Junlei and Zhang, Jinghan and Su, Tangjun and Liu, Junteng and Lv, Chuancheng and Zhang, Yikai and Lei, Jiayi and Fu, Yao and Sun, Maosong and He, Junxian},
+booktitle={Advances in Neural Information Processing Systems},
+year={2023}
+}
+
+@inproceedings{wolf-etal-2020-transformers,
+    title = "Transformers: State-of-the-Art Natural Language Processing",
+    author = "Wolf, Thomas  and
+      Debut, Lysandre  and
+      Sanh, Victor  and
+      Chaumond, Julien  and
+      Delangue, Clement  and
+      Moi, Anthony  and
+      Cistac, Pierric  and
+      Rault, Tim  and
+      Louf, Remi  and
+      Funtowicz, Morgan  and
+      Davison, Joe  and
+      Shleifer, Sam  and
+      von Platen, Patrick  and
+      Ma, Clara  and
+      Jernite, Yacine  and
+      Plu, Julien  and
+      Xu, Canwen  and
+      Le Scao, Teven  and
+      Gugger, Sylvain  and
+      Drame, Mariama  and
+      Lhoest, Quentin  and
+      Rush, Alexander",
+    editor = "Liu, Qun  and
+      Schlangen, David",
+    booktitle = "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: System Demonstrations",
+    month = oct,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.emnlp-demos.6",
+    doi = "10.18653/v1/2020.emnlp-demos.6",
+    pages = "38--45",
+    abstract = "Recent progress in natural language processing has been driven by advances in both model architecture and model pretraining. Transformer architectures have facilitated building higher-capacity models and pretraining has made it possible to effectively utilize this capacity for a wide variety of tasks. Transformers is an open-source library with the goal of opening up these advances to the wider machine learning community. The library consists of carefully engineered state-of-the art Transformer architectures under a unified API. Backing this library is a curated collection of pretrained models made by and available for the community. Transformers is designed to be extensible by researchers, simple for practitioners, and fast and robust in industrial deployments. The library is available at \url{https://github.com/huggingface/transformers}.",
+}
+
+@inproceedings{GLM,
+  title={GLM: General Language Model Pretraining with Autoregressive Blank Infilling},
+  author={Du, Zhengxiao and Qian, Yujie and Liu, Xiao and Ding, Ming and Qiu, Jiezhong and Yang, Zhilin and Tang, Jie},
+  booktitle={Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages={320--335},
+  year={2022}
+}
+
+@article{baichuan2,
+  title={Baichuan 2: Open Large-scale Language Models},
+  author={Baichuan},
+  journal={arXiv preprint arXiv:2309.10305},
+  url={https://arxiv.org/abs/2309.10305},
+  year={2023}
+}
+
+@article{faiss,
+  title={Billion-scale similarity search with {GPUs}},
+  author={Johnson, Jeff and Douze, Matthijs and J{\'e}gou, Herv{\'e}},
+  journal={IEEE Transactions on Big Data},
+  volume={7},
+  number={3},
+  pages={535--547},
+  year={2019},
+  publisher={IEEE}
+}
+
+@misc{GPT4,
+Author = { OpenAI},
+Title = {GPT-4 Technical Report},
+Year = {2023},
+Eprint = {arXiv:2303.08774},
+}
+
+@misc{Claude2,
+Author = {Anthropic},
+Title = {Model Card and Evaluations for Claude Models},
+Year = {2023},
+}
+
+@misc{PaLM2,
+Author = {Rohan Anil et al.},
+Title = {PaLM 2 Technical Report},
+Year = {2023},
+Eprint = {arXiv:2305.10403},
+}
+
+@article{Odmaa,
+  title={Preliminary study on the construction of Chinese medical knowledge graph.},
+  author={Odmaa, BYAMBASUREN and Yunfei, YANG and Zhifang, SUI and Damai, DAI and Baobao, CHANG and Sujian, LI and Hongying, ZAN},
+  journal={Journal of Chinese Information Processing},
+  volume={33},
+  number={10},
+  pages={1--7},
+  year={2019}
+}
+
+@misc{ChatLaw,
+  author={Jiaxi Cui and Zongjian Li and Yang Yan and Bohua Chen and Li Yuan},
+  title={ChatLaw},
+  year={2023},
+  publisher={GitHub},
+  journal={GitHub repository},
+  howpublished={\url{https://github.com/PKU-YuanGroup/ChatLaw}},
+}
+
+@misc{XuanYuan,
+Author = {Xuanyu Zhang and Qing Yang and Dongliang Xu},
+Title = {XuanYuan 2.0: A Large Chinese Financial Chat Model with Hundreds of Billions Parameters},
+Year = {2023},
+Eprint = {arXiv:2305.12002},
+}
+
+@article{Doctorglm,
+  title={Doctorglm: Fine-tuning your chinese doctor is not a herculean task},
+  author={Xiong, Honglin and Wang, Sheng and Zhu, Yitao and Zhao, Zihao and Liu, Yuxiao and Wang, Qian and Shen, Dinggang},
+  journal={arXiv preprint arXiv:2304.01097},
+  year={2023}
+}
+
+@article{touvron2023llama,
+  title={Llama: Open and efficient foundation language models},
+  author={Touvron, Hugo and Lavril, Thibaut and Izacard, Gautier and Martinet, Xavier and Lachaux, Marie-Anne and Lacroix, Timoth{\'e}e and Rozi{\`e}re, Baptiste and Goyal, Naman and Hambro, Eric and Azhar, Faisal and others},
+  journal={arXiv preprint arXiv:2302.13971},
+  year={2023}
+}
+
+@misc{alpaca,
+  author = {Rohan Taori and Ishaan Gulrajani and Tianyi Zhang and Yann Dubois and Xuechen Li and Carlos Guestrin and Percy Liang and Tatsunori B. Hashimoto },
+  title = {Stanford Alpaca: An Instruction-following LLaMA model},
+  year = {2023},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/tatsu-lab/stanford_alpaca}},
+}
+
+@inproceedings{
+  zeng2023glm-130b,
+  title={{GLM}-130B: An Open Bilingual Pre-trained Model},
+  author={Aohan Zeng and Xiao Liu and Zhengxiao Du and Zihan Wang and Hanyu Lai and Ming Ding and Zhuoyi Yang and Yifan Xu and Wendi Zheng and Xiao Xia and Weng Lam Tam and Zixuan Ma and Yufei Xue and Jidong Zhai and Wenguang Chen and Zhiyuan Liu and Peng Zhang and Yuxiao Dong and Jie Tang},
+  booktitle={The Eleventh International Conference on Learning Representations (ICLR)},
+  year={2023},
+  url={https://openreview.net/forum?id=-Aw0rrrPUF}
+}
+
+@misc{chatgpt,
+  author = {OpenAI},
+  title = {ChatGPT},
+  year = {2022},
+  howpublished = {\url{https://chat.openai.com}},
+}
+
+@misc{MathGPT,
+  author = {Tycho Young, Andy Zhang, Krish Mangroila},
+  title = {MathGPT - An Exploration Into the Field of Mathematics with Large Language Models},
+  year = {2023},
+}
+
+@misc{TrafficGPT,
+Author = {Siyao Zhang and Daocheng Fu and Zhao Zhang and Bin Yu and Pinlong Cai},
+Title = {TrafficGPT: Viewing, Processing and Interacting with Traffic Foundation Models},
+Year = {2023},
+Eprint = {arXiv:2309.06719},
+}
+
+@misc{Prithvi-100M,
+    author          = {Jakubik et al.},
+    doi             = {10.57967/hf/0952},
+    month           = aug,
+    title           = {{Prithvi-100M}},
+    repository-code = {https://github.com/NASA-IMPACT/hls-foundation-os},
+    year            = {2023}
+}
+
+@article{wei2022emergent,
+  title={Emergent abilities of large language models},
+  author={Wei, Jason and Tay, Yi and Bommasani, Rishi and Raffel, Colin and Zoph, Barret and Borgeaud, Sebastian and Yogatama, Dani and Bosma, Maarten and Zhou, Denny and Metzler, Donald and others},
+  journal={arXiv preprint arXiv:2206.07682},
+  year={2022}
+}
+
+@software{TransGPT,
+  author = {Wang Peng},
+  title = {DUOMO/TransGPT},
+  year = {2023},
+  url = {https://github.com/DUOMO/TransGPT},
+}
+
+@inproceedings{
+lora,
+title={Lo{RA}: Low-Rank Adaptation of Large Language Models},
+author={Edward J Hu and Yelong Shen and Phillip Wallis and Zeyuan Allen-Zhu and Yuanzhi Li and Shean Wang and Lu Wang and Weizhu Chen},
+booktitle={International Conference on Learning Representations},
+year={2022},
+url={https://openreview.net/forum?id=nZeVKeeFYf9}
+}
+
+@misc{webglm,
+      title={WebGLM: Towards An Efficient Web-Enhanced Question Answering System with Human Preferences},
+      author={Xiao Liu and Hanyu Lai and Hao Yu and Yifan Xu and Aohan Zeng and Zhengxiao Du and Peng Zhang and Yuxiao Dong and Jie Tang},
+      year={2023},
+      eprint={2306.07906},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+@misc{RLHF,
+Author = {Paul Christiano and Jan Leike and Tom B. Brown and Miljan Martic and Shane Legg and Dario Amodei},
+Title = {Deep reinforcement learning from human preferences},
+Year = {2017},
+Eprint = {arXiv:1706.03741},
+}
+
+@article{ouyang2022training,
+  title={Training language models to follow instructions with human feedback},
+  author={Ouyang, Long and Wu, Jeffrey and Jiang, Xu and Almeida, Diogo and Wainwright, Carroll and Mishkin, Pamela and Zhang, Chong and Agarwal, Sandhini and Slama, Katarina and Ray, Alex and others},
+  journal={Advances in Neural Information Processing Systems},
+  volume={35},
+  pages={27730--27744},
+  year={2022}
+}
+
+@misc{reimers2019sbert,
+      title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks}, 
+      author={Nils Reimers and Iryna Gurevych},
+      year={2019},
+      eprint={1908.10084},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/1908.10084}, 
+}
+@misc{li2024urbangpt,
+      title={UrbanGPT: Spatio-Temporal Large Language Models}, 
+      author={Zhonghang Li and Lianghao Xia and Jiabin Tang and Yong Xu and Lei Shi and Long Xia and Dawei Yin and Chao Huang},
+      year={2024},
+      eprint={2403.00813},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2403.00813}, 
+}
+
+@misc{li2024glan,
+      title={Synthetic Data (Almost) from Scratch: Generalized Instruction Tuning for Language Models}, 
+      author={Haoran Li and Qingxiu Dong and Zhengyang Tang and Chaojun Wang and Xingxing Zhang and Haoyang Huang and Shaohan Huang and Xiaolong Huang and Zeqiang Huang and Dongdong Zhang and Yuxian Gu and Xin Cheng and Xun Wang and Si-Qing Chen and Li Dong and Wei Lu and Zhifang Sui and Benyou Wang and Wai Lam and Furu Wei},
+      year={2024},
+      eprint={2402.13064},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2402.13064}, 
+}
+
+
+@misc{lu2023instag,
+      title={\#InsTag: Instruction Tagging for Analyzing Supervised Fine-tuning of Large Language Models}, 
+      author={Keming Lu and Hongyi Yuan and Zheng Yuan and Runji Lin and Junyang Lin and Chuanqi Tan and Chang Zhou and Jingren Zhou},
+      year={2023},
+      eprint={2308.07074},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2308.07074}, 
+}
+
+@misc{liu2024deita,
+      title={What Makes Good Data for Alignment? A Comprehensive Study of Automatic Data Selection in Instruction Tuning}, 
+      author={Wei Liu and Weihao Zeng and Keqing He and Yong Jiang and Junxian He},
+      year={2024},
+      eprint={2312.15685},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2312.15685}, 
+}
+
+
+@misc{allenzhu2024physics,
+      title={Physics of Language Models: Part 3.1, Knowledge Storage and Extraction}, 
+      author={Zeyuan Allen-Zhu and Yuanzhi Li},
+      year={2024},
+      eprint={2309.14316},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2309.14316}, 
+}
+
+@misc{yang2024selfdistill,
+      title={Self-Distillation Bridges Distribution Gap in Language Model Fine-Tuning}, 
+      author={Zhaorui Yang and Tianyu Pang and Haozhe Feng and Han Wang and Wei Chen and Minfeng Zhu and Qian Liu},
+      year={2024},
+      eprint={2402.13669},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2402.13669}, 
+}
+
+@misc{deepseekai2025deepseekv3technicalreport,
+      title={DeepSeek-V3 Technical Report}, 
+      author={DeepSeek-AI and Aixin Liu and Bei Feng and Bing Xue and Bingxuan Wang and Bochao Wu and Chengda Lu and Chenggang Zhao and Chengqi Deng and Chenyu Zhang and Chong Ruan and Damai Dai and Daya Guo and Dejian Yang and Deli Chen and Dongjie Ji and Erhang Li and Fangyun Lin and Fucong Dai and Fuli Luo and Guangbo Hao and Guanting Chen and Guowei Li and H. Zhang and Han Bao and Hanwei Xu and Haocheng Wang and Haowei Zhang and Honghui Ding and Huajian Xin and Huazuo Gao and Hui Li and Hui Qu and J. L. Cai and Jian Liang and Jianzhong Guo and Jiaqi Ni and Jiashi Li and Jiawei Wang and Jin Chen and Jingchang Chen and Jingyang Yuan and Junjie Qiu and Junlong Li and Junxiao Song and Kai Dong and Kai Hu and Kaige Gao and Kang Guan and Kexin Huang and Kuai Yu and Lean Wang and Lecong Zhang and Lei Xu and Leyi Xia and Liang Zhao and Litong Wang and Liyue Zhang and Meng Li and Miaojun Wang and Mingchuan Zhang and Minghua Zhang and Minghui Tang and Mingming Li and Ning Tian and Panpan Huang and Peiyi Wang and Peng Zhang and Qiancheng Wang and Qihao Zhu and Qinyu Chen and Qiushi Du and R. J. Chen and R. L. Jin and Ruiqi Ge and Ruisong Zhang and Ruizhe Pan and Runji Wang and Runxin Xu and Ruoyu Zhang and Ruyi Chen and S. S. Li and Shanghao Lu and Shangyan Zhou and Shanhuang Chen and Shaoqing Wu and Shengfeng Ye and Shengfeng Ye and Shirong Ma and Shiyu Wang and Shuang Zhou and Shuiping Yu and Shunfeng Zhou and Shuting Pan and T. Wang and Tao Yun and Tian Pei and Tianyu Sun and W. L. Xiao and Wangding Zeng and Wanjia Zhao and Wei An and Wen Liu and Wenfeng Liang and Wenjun Gao and Wenqin Yu and Wentao Zhang and X. Q. Li and Xiangyue Jin and Xianzu Wang and Xiao Bi and Xiaodong Liu and Xiaohan Wang and Xiaojin Shen and Xiaokang Chen and Xiaokang Zhang and Xiaosha Chen and Xiaotao Nie and Xiaowen Sun and Xiaoxiang Wang and Xin Cheng and Xin Liu and Xin Xie and Xingchao Liu and Xingkai Yu and Xinnan Song and Xinxia Shan and Xinyi Zhou and Xinyu Yang and Xinyuan Li and Xuecheng Su and Xuheng Lin and Y. K. Li and Y. Q. Wang and Y. X. Wei and Y. X. Zhu and Yang Zhang and Yanhong Xu and Yanhong Xu and Yanping Huang and Yao Li and Yao Zhao and Yaofeng Sun and Yaohui Li and Yaohui Wang and Yi Yu and Yi Zheng and Yichao Zhang and Yifan Shi and Yiliang Xiong and Ying He and Ying Tang and Yishi Piao and Yisong Wang and Yixuan Tan and Yiyang Ma and Yiyuan Liu and Yongqiang Guo and Yu Wu and Yuan Ou and Yuchen Zhu and Yuduan Wang and Yue Gong and Yuheng Zou and Yujia He and Yukun Zha and Yunfan Xiong and Yunxian Ma and Yuting Yan and Yuxiang Luo and Yuxiang You and Yuxuan Liu and Yuyang Zhou and Z. F. Wu and Z. Z. Ren and Zehui Ren and Zhangli Sha and Zhe Fu and Zhean Xu and Zhen Huang and Zhen Zhang and Zhenda Xie and Zhengyan Zhang and Zhewen Hao and Zhibin Gou and Zhicheng Ma and Zhigang Yan and Zhihong Shao and Zhipeng Xu and Zhiyu Wu and Zhongyu Zhang and Zhuoshu Li and Zihui Gu and Zijia Zhu and Zijun Liu and Zilin Li and Ziwei Xie and Ziyang Song and Ziyi Gao and Zizheng Pan},
+      year={2025},
+      eprint={2412.19437},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2412.19437}, 
+}
+
+@misc{wei2022flan,
+      title={Finetuned Language Models Are Zero-Shot Learners}, 
+      author={Jason Wei and Maarten Bosma and Vincent Y. Zhao and Kelvin Guu and Adams Wei Yu and Brian Lester and Nan Du and Andrew M. Dai and Quoc V. Le},
+      year={2022},
+      eprint={2109.01652},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2109.01652}, 
+}
+
+@misc{xu2024magpie,
+      title={Magpie: Alignment Data Synthesis from Scratch by Prompting Aligned LLMs with Nothing}, 
+      author={Zhangchen Xu and Fengqing Jiang and Luyao Niu and Yuntian Deng and Radha Poovendran and Yejin Choi and Bill Yuchen Lin},
+      year={2024},
+      eprint={2406.08464},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2406.08464}, 
+}
+
+@misc{longpre2023flancollection,
+      title={The Flan Collection: Designing Data and Methods for Effective Instruction Tuning}, 
+      author={Shayne Longpre and Le Hou and Tu Vu and Albert Webson and Hyung Won Chung and Yi Tay and Denny Zhou and Quoc V. Le and Barret Zoph and Jason Wei and Adam Roberts},
+      year={2023},
+      eprint={2301.13688},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2301.13688}, 
+}
+
+@misc{gutiérrez2025hipporag,
+      title={HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models}, 
+      author={Bernal Jiménez Gutiérrez and Yiheng Shu and Yu Gu and Michihiro Yasunaga and Yu Su},
+      year={2025},
+      eprint={2405.14831},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2405.14831}, 
+}
+
+@misc{gutiérrez2025hipporag2,
+      title={From RAG to Memory: Non-Parametric Continual Learning for Large Language Models}, 
+      author={Bernal Jiménez Gutiérrez and Yiheng Shu and Weijian Qi and Sizhe Zhou and Yu Su},
+      year={2025},
+      eprint={2502.14802},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2502.14802}, 
+}
+
+@misc{feng2024citygpt,
+      title={CityGPT: Empowering Urban Spatial Cognition of Large Language Models}, 
+      author={Jie Feng and Yuwei Du and Tianhui Liu and Siqi Guo and Yuming Lin and Yong Li},
+      year={2024},
+      eprint={2406.13948},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2406.13948}, 
+}
+
+@misc{xu2024magpiealignmentdatasynthesis,
+      title={Magpie: Alignment Data Synthesis from Scratch by Prompting Aligned LLMs with Nothing}, 
+      author={Zhangchen Xu and Fengqing Jiang and Luyao Niu and Yuntian Deng and Radha Poovendran and Yejin Choi and Bill Yuchen Lin},
+      year={2024},
+      eprint={2406.08464},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2406.08464}, 
+}
+
+
+
+
+@misc{yang2023baichuan2,
+      title={Baichuan 2: Open Large-scale Language Models}, 
+      author={Aiyuan Yang and Bin Xiao and Bingning Wang and Borong Zhang and Ce Bian and Chao Yin and Chenxu Lv and Da Pan and Dian Wang and Dong Yan and Fan Yang and Fei Deng and Feng Wang and Feng Liu and Guangwei Ai and Guosheng Dong and Haizhou Zhao and Hang Xu and Haoze Sun and Hongda Zhang and Hui Liu and Jiaming Ji and Jian Xie and JunTao Dai and Kun Fang and Lei Su and Liang Song and Lifeng Liu and Liyun Ru and Luyao Ma and Mang Wang and Mickel Liu and MingAn Lin and Nuolan Nie and Peidong Guo and Ruiyang Sun and Tao Zhang and Tianpeng Li and Tianyu Li and Wei Cheng and Weipeng Chen and Xiangrong Zeng and Xiaochuan Wang and Xiaoxi Chen and Xin Men and Xin Yu and Xuehai Pan and Yanjun Shen and Yiding Wang and Yiyu Li and Youxin Jiang and Yuchen Gao and Yupeng Zhang and Zenan Zhou and Zhiying Wu},
+      year={2023},
+      eprint={2309.10305},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2309.10305}, 
+}
+
+@misc{qwen2025qwen25technicalreport,
+      title={Qwen2.5 Technical Report}, 
+      author={Qwen and : and An Yang and Baosong Yang and Beichen Zhang and Binyuan Hui and Bo Zheng and Bowen Yu and Chengyuan Li and Dayiheng Liu and Fei Huang and Haoran Wei and Huan Lin and Jian Yang and Jianhong Tu and Jianwei Zhang and Jianxin Yang and Jiaxi Yang and Jingren Zhou and Junyang Lin and Kai Dang and Keming Lu and Keqin Bao and Kexin Yang and Le Yu and Mei Li and Mingfeng Xue and Pei Zhang and Qin Zhu and Rui Men and Runji Lin and Tianhao Li and Tianyi Tang and Tingyu Xia and Xingzhang Ren and Xuancheng Ren and Yang Fan and Yang Su and Yichang Zhang and Yu Wan and Yuqiong Liu and Zeyu Cui and Zhenru Zhang and Zihan Qiu},
+      year={2025},
+      eprint={2412.15115},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2412.15115}, 
+}
+
+@misc{text2vec,
+  author = {Ming Xu},
+  title = {Text2vec: Text to vector toolkit},
+  year = {2023},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/shibing624/text2vec}},
+}
+
+
+
+@inproceedings{cer-etal-2017-semeval,
+    title = "{S}em{E}val-2017 Task 1: Semantic Textual Similarity Multilingual and Crosslingual Focused Evaluation",
+    author = "Cer, Daniel  and
+      Diab, Mona  and
+      Agirre, Eneko  and
+      Lopez-Gazpio, I{\~n}igo  and
+      Specia, Lucia",
+    editor = "Bethard, Steven  and
+      Carpuat, Marine  and
+      Apidianaki, Marianna  and
+      Mohammad, Saif M.  and
+      Cer, Daniel  and
+      Jurgens, David",
+    booktitle = "Proceedings of the 11th International Workshop on Semantic Evaluation ({S}em{E}val-2017)",
+    month = aug,
+    year = "2017",
+    address = "Vancouver, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/S17-2001",
+    doi = "10.18653/v1/S17-2001",
+    pages = "1--14",
+    abstract = "Semantic Textual Similarity (STS) measures the meaning similarity of sentences. Applications include machine translation (MT), summarization, generation, question answering (QA), short answer grading, semantic search, dialog and conversational systems. The STS shared task is a venue for assessing the current state-of-the-art. The 2017 task focuses on multilingual and cross-lingual pairs with one sub-track exploring MT quality estimation (MTQE) data. The task obtained strong participation from 31 teams, with 17 participating in \textit{all language tracks}. We summarize performance and review a selection of well performing methods. Analysis highlights common errors, providing insight into the limitations of existing models. To support ongoing work on semantic representations, the \textit{STS Benchmark} is introduced as a new shared training and evaluation set carefully selected from the corpus of English STS shared task data (2012-2017).",
+}
+
+@inproceedings{liu-etal-2018-lcqmc,
+    title = "{LCQMC}:A Large-scale {C}hinese Question Matching Corpus",
+    author = "Liu, Xin  and
+      Chen, Qingcai  and
+      Deng, Chong  and
+      Zeng, Huajun  and
+      Chen, Jing  and
+      Li, Dongfang  and
+      Tang, Buzhou",
+    editor = "Bender, Emily M.  and
+      Derczynski, Leon  and
+      Isabelle, Pierre",
+    booktitle = "Proceedings of the 27th International Conference on Computational Linguistics",
+    month = aug,
+    year = "2018",
+    address = "Santa Fe, New Mexico, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/C18-1166",
+    pages = "1952--1962",
+    abstract = "The lack of large-scale question matching corpora greatly limits the development of matching methods in question answering (QA) system, especially for non-English languages. To ameliorate this situation, in this paper, we introduce a large-scale Chinese question matching corpus (named LCQMC), which is released to the public1. LCQMC is more general than paraphrase corpus as it focuses on intent matching rather than paraphrase. How to collect a large number of question pairs in variant linguistic forms, which may present the same intent, is the key point for such corpus construction. In this paper, we first use a search engine to collect large-scale question pairs related to high-frequency words from various domains, then filter irrelevant pairs by the Wasserstein distance, and finally recruit three annotators to manually check the left pairs. After this process, a question matching corpus that contains 260,068 question pairs is constructed. In order to verify the LCQMC corpus, we split it into three parts, i.e., a training set containing 238,766 question pairs, a development set with 8,802 question pairs, and a test set with 12,500 question pairs, and test several well-known sentence matching methods on it. The experimental results not only demonstrate the good quality of LCQMC but also provide solid baseline performance for further researches on this corpus.",
+}
+
+@inproceedings{weifinetuned,
+  title={Finetuned Language Models are Zero-Shot Learners},
+  author={Wei, Jason and Bosma, Maarten and Zhao, Vincent and Guu, Kelvin and Yu, Adams Wei and Lester, Brian and Du, Nan and Dai, Andrew M and Le, Quoc V},
+  booktitle={International Conference on Learning Representations},
+  year={2022}
+}
+
+@article{wang2022self,
+  title={Self-Instruct: Aligning Language Model with Self Generated Instructions},
+  author={Wang, Yizhong and Kordi, Yeganeh and Mishra, Swaroop and Liu, Alisa and Smith, Noah A and Khashabi, Daniel and Hajishirzi, Hannaneh},
+  journal={arXiv preprint arXiv:2212.10560},
+  year={2022}
+}
+
+@article{gilson2023does,
+  title={How does CHATGPT perform on the United States Medical Licensing Examination? the implications of large language models for medical education and knowledge assessment},
+  author={Gilson, Aidan and Safranek, Conrad W and Huang, Thomas and Socrates, Vimig and Chi, Ling and Taylor, Richard Andrew and Chartash, David and others},
+  journal={JMIR Medical Education},
+  volume={9},
+  number={1},
+  pages={e45312},
+  year={2023},
+  publisher={JMIR Publications Inc., Toronto, Canada}
+}
+
+@misc{llm-zoo-2023,
+  title={LLM Zoo: democratizing ChatGPT},
+  author={Zhihong Chen and Junying Chen and Hongbo Zhang and Feng Jiang and Guiming Chen and Fei Yu and Tiannan Wang and Juhao Liang and Chen Zhang and Zhiyi Zhang and Jianquan Li and Xiang Wan and Haizhou Li and Benyou Wang},
+  year = {2023},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/FreedomIntelligence/LLMZoo}},
+}
+
+
+
+@misc{yunxiang2023chatdoctor,
+      title={ChatDoctor: A Medical Chat Model Fine-tuned on LLaMA Model using Medical Domain Knowledge}, 
+      author={Li, Yunxiang and Li, Zihan and Zhang, Kai and Dan, Ruilong and Zhang, You},
+      year={2023},
+      eprint={2303.14070},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+
+@article{li2023self,
+  title={Self-alignment with instruction backtranslation},
+  author={Li, Xian and Yu, Ping and Zhou, Chunting and Schick, Timo and Zettlemoyer, Luke and Levy, Omer and Weston, Jason and Lewis, Mike},
+  journal={arXiv preprint arXiv:2308.06259},
+  year={2023}
+}
+
+@article{xu2023wizardlm,
+  title={Wizardlm: Empowering large language models to follow complex instructions},
+  author={Xu, Can and Sun, Qingfeng and Zheng, Kai and Geng, Xiubo and Zhao, Pu and Feng, Jiazhan and Tao, Chongyang and Jiang, Daxin},
+  journal={arXiv preprint arXiv:2304.12244},
+  year={2023}
+}
+
+@article{zhou2024lima,
+  title={Lima: Less is more for alignment},
+  author={Zhou, Chunting and Liu, Pengfei and Xu, Puxin and Iyer, Srinivasan and Sun, Jiao and Mao, Yuning and Ma, Xuezhe and Efrat, Avia and Yu, Ping and Yu, Lili and others},
+  journal={Advances in Neural Information Processing Systems},
+  volume={36},
+  year={2024}
+}
+
+@article{du2023mods,
+  title={Mods: Model-oriented data selection for instruction tuning},
+  author={Du, Qianlong and Zong, Chengqing and Zhang, Jiajun},
+  journal={arXiv preprint arXiv:2311.15653},
+  year={2023}
+}
+
+@article{sener2017active,
+  title={Active learning for convolutional neural networks: A core-set approach},
+  author={Sener, Ozan and Savarese, Silvio},
+  journal={arXiv preprint arXiv:1708.00489},
+  year={2017}
+}
+
+@article{spearman1961proof,
+  title={The proof and measurement of association between two things.},
+  author={Spearman, Charles},
+  year={1961},
+  publisher={Appleton-Century-Crofts}
+}
+
+
+@misc{xagent2023,
+      title={XAgent: An Autonomous Agent for Complex Task Solving}, 
+      author={XAgent Team},
+      year={2023},
+}
+
+@article{xie2023openagents,
+  title={Openagents: An open platform for language agents in the wild},
+  author={Xie, Tianbao and Zhou, Fan and Cheng, Zhoujun and Shi, Peng and Weng, Luoxuan and Liu, Yitao and Hua, Toh Jing and Zhao, Junning and Liu, Qian and Liu, Che and others},
+  journal={arXiv preprint arXiv:2310.10634},
+  year={2023}
+}
+
+@article{hong2023metagpt,
+  title={Metagpt: Meta programming for multi-agent collaborative framework},
+  author={Hong, Sirui and Zheng, Xiawu and Chen, Jonathan and Cheng, Yuheng and Wang, Jinlin and Zhang, Ceyao and Wang, Zili and Yau, Steven Ka Shing and Lin, Zijuan and Zhou, Liyang and others},
+  journal={arXiv preprint arXiv:2308.00352},
+  year={2023}
+}
+
+
+@article{t-SNE,
+  title={Visualizing data using t-SNE.},
+  author={Van der Maaten, Laurens and Hinton, Geoffrey},
+  journal={Journal of machine learning research},
+  volume={9},
+  number={11},
+  year={2008}
+}
+
+@software{Significant_Gravitas_AutoGPT,
+author = {{Significant Gravitas}},
+license = {MIT},
+title = {{AutoGPT}},
+url = {https://github.com/Significant-Gravitas/AutoGPT}
+}
+
+@inproceedings{wu2023autogen,
+      title={AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation Framework},
+      author={Qingyun Wu and Gagan Bansal and Jieyu Zhang and Yiran Wu and Beibin Li and Erkang Zhu and Li Jiang and Xiaoyun Zhang and Shaokun Zhang and Jiale Liu and Ahmed Hassan Awadallah and Ryen W White and Doug Burger and Chi Wang},
+      year={2023},
+      eprint={2308.08155},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI}
+}
+
+@misc{lagent2023,
+    title={{Lagent: InternLM} a lightweight open-source framework that allows users to efficiently build large language model(LLM)-based agents},
+    author={Lagent Developer Team},
+    howpublished = {\url{https://github.com/InternLM/lagent}},
+    year={2023}
+}
+
+@article{nakajimababyagi,
+  title={Babyagi, 2023},
+  author={Nakajima, Yohei},
+  journal={URL https://github. com/yoheinakajima/babyagi. GitHub repository}
+}
+
+@article{shao2023built,
+  title={Built environment interventions for emission mitigation: A machine learning analysis of travel-related CO2 in a developing city},
+  author={Shao, Q. and Zhang, W. and Cao, X. J. and Yang, J.},
+  journal={Journal of Transport Geography},
+  volume={110},
+  pages={103632},
+  year={2023}
+}
+
+@article{liu2023social,
+  title={Social and spatial heterogeneities in COVID-19 impacts on individual's metro use: A big-data driven causality inference},
+  author={Liu, C. and Zhang, W.},
+  journal={Applied Geography},
+  volume={155},
+  pages={102947},
+  year={2023}
+}
+
+@article{zhang2023spatiotemporal,
+  title={Spatiotemporal heterogeneities in the causal effects of mobility intervention policies during the COVID-19 outbreak: A spatially interrupted time-series (SITS) analysis},
+  author={Zhang, W. and Ning, K.},
+  journal={Annals of the American Association of Geographers},
+  volume={113},
+  number={5},
+  pages={1112-1134},
+  year={2023}
+}
+
+@article{zhang2022incorporating,
+  title={Incorporating polycentric development and neighborhood life-circle planning for reducing driving in Beijing: Nonlinear and threshold analysis},
+  author={Zhang, W. and Lu, D. and Zhao, Y. and Luo, X. and Yin, J.},
+  journal={Cities},
+  volume={121},
+  pages={103488},
+  year={2022}
+}
+
+@article{shao2020threshold,
+  title={Threshold and moderating effects of land use on metro ridership in Shenzhen: Implications for TOD planning},
+  author={Shao, Q. and Zhang, W. and Cao, X. and Yang, J. and Yin, J.},
+  journal={Journal of Transport Geography},
+  volume={89},
+  pages={102878},
+  year={2020}
+}
+
+@article{zhang2020nonlinear,
+  title={Nonlinear effect of accessibility on car ownership in Beijing: Pedestrian-scale neighborhood planning},
+  author={Zhang, W. and Zhao, Y. and Cao, X. J. and Lu, D. and Chai, Y.},
+  journal={Transportation Research Part D: Transport and Environment},
+  volume={86},
+  pages={102445},
+  year={2020}
+}
+
+@article{zhang2020measuring,
+  title={Measuring megaregional structure in the Pearl River Delta by mobile phone signaling data: A complex network approach},
+  author={Zhang, W. and Fang, C. and Zhou, L. and Zhu, J.},
+  journal={Cities},
+  volume={104},
+  pages={102809},
+  year={2020}
+}
+
+@article{zhang2016optimal,
+  title={Optimal policies in cities with congestion and agglomeration externalities: Congestion tolls, labor subsidies, and place-based strategies},
+  author={Zhang, W. and Kockelman, K. M.},
+  journal={Journal of Urban Economics},
+  volume={95},
+  pages={64-86},
+  year={2016}
+}
+
+@article{zhang2019mesoscale,
+  title={Mesoscale structures in world city networks},
+  author={Zhang, W. and Thill, J. C.},
+  journal={Annals of the American Association of Geographers},
+  volume={109},
+  number={3},
+  pages={887-908},
+  year={2019}
+}
+
+@article{rafailov2024direct,
+  title={Direct preference optimization: Your language model is secretly a reward model},
+  author={Rafailov, Rafael and Sharma, Archit and Mitchell, Eric and Manning, Christopher D and Ermon, Stefano and Finn, Chelsea},
+  journal={Advances in Neural Information Processing Systems},
+  volume={36},
+  year={2024}
+}
+
+
+
+@misc{MobilityAgent2023,
+    title={MobilityAgent},
+    author={Tianle Lun and Yicheng Tao and Junyou Su and He Zhu and Zipei Fan},
+    howpublished = {\url{https://github.com/XiaoLeGG/mobility-agent}},
+    year={2023}
+}
+
+
+@article{cui2022lert,
+      title={LERT: A Linguistically-motivated Pre-trained Language Model}, 
+      author={Cui, Yiming and Che, Wanxiang and Wang, Shijin and Liu, Ting},
+      year={2022},
+      eprint={2211.05344},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+
+@journal{cui-etal-2021-pretrain,
+  title={Pre-Training with Whole Word Masking for Chinese BERT},
+  author={Cui, Yiming and Che, Wanxiang and Liu, Ting and Qin, Bing and Yang, Ziqing},
+  journal={IEEE Transactions on Audio, Speech and Language Processing},
+  year={2021},
+  url={https://ieeexplore.ieee.org/document/9599397},
+  doi={10.1109/TASLP.2021.3124365},
+ }
+
+@misc{mikolov2013efficient,
+      title={Efficient Estimation of Word Representations in Vector Space}, 
+      author={Tomas Mikolov and Kai Chen and Greg Corrado and Jeffrey Dean},
+      year={2013},
+      eprint={1301.3781},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+
+@misc{chen2024bge,
+      title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation}, 
+      author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+      year={2024},
+      eprint={2402.03216},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+
+@misc{reimers2019sentencebert,
+      title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks}, 
+      author={Nils Reimers and Iryna Gurevych},
+      year={2019},
+      eprint={1908.10084},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+
+@misc{gao2022simcse,
+      title={SimCSE: Simple Contrastive Learning of Sentence Embeddings}, 
+      author={Tianyu Gao and Xingcheng Yao and Danqi Chen},
+      year={2022},
+      eprint={2104.08821},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+@misc{kexuefm-8847,
+        title={CoSENT},
+        author={Jianlin Su},
+        year={2022},
+        howpulished={\url{https://kexue.fm/archives/8847}},
+}
+
+@article{huang2023raven,
+  title={Raven: In-context learning with retrieval augmented encoder-decoder language models},
+  author={Huang, Jie and Ping, Wei and Xu, Peng and Shoeybi, Mohammad and Chang, Kevin Chen-Chuan and Catanzaro, Bryan},
+  journal={arXiv preprint arXiv:2308.07922},
+  year={2023}
+}
+
+@inproceedings{borgeaud2022improving,
+  title={Improving language models by retrieving from trillions of tokens},
+  author={Borgeaud, Sebastian and Mensch, Arthur and Hoffmann, Jordan and Cai, Trevor and Rutherford, Eliza and Millican, Katie and Van Den Driessche, George Bm and Lespiau, Jean-Baptiste and Damoc, Bogdan and Clark, Aidan and others},
+  booktitle={International conference on machine learning},
+  pages={2206--2240},
+  year={2022},
+  organization={PMLR}
+}
+
+@article{kim2023tree,
+  title={Tree of clarifications: Answering ambiguous questions with retrieval-augmented large language models},
+  author={Kim, Gangwoo and Kim, Sungdong and Jeon, Byeongguk and Park, Joonsuk and Kang, Jaewoo},
+  journal={arXiv preprint arXiv:2310.14696},
+  year={2023}
+}
+
+@article{cheng2024lift,
+  title={Lift Yourself Up: Retrieval-augmented Text Generation with Self-Memory},
+  author={Cheng, Xin and Luo, Di and Chen, Xiuying and Liu, Lemao and Zhao, Dongyan and Yan, Rui},
+  journal={Advances in Neural Information Processing Systems},
+  volume={36},
+  year={2024}
+}
+
+@article{yu2022generate,
+  title={Generate rather than retrieve: Large language models are strong context generators},
+  author={Yu, Wenhao and Iter, Dan and Wang, Shuohang and Xu, Yichong and Ju, Mingxuan and Sanyal, Soumya and Zhu, Chenguang and Zeng, Michael and Jiang, Meng},
+  journal={arXiv preprint arXiv:2209.10063},
+  year={2022}
+}
+
+@article{sun2022recitation,
+  title={Recitation-augmented language models},
+  author={Sun, Zhiqing and Wang, Xuezhi and Tay, Yi and Yang, Yiming and Zhou, Denny},
+  journal={arXiv preprint arXiv:2210.01296},
+  year={2022}
+}
+
+@article{asai2023self,
+  title={Self-rag: Learning to retrieve, generate, and critique through self-reflection},
+  author={Asai, Akari and Wu, Zeqiu and Wang, Yizhong and Sil, Avirup and Hajishirzi, Hannaneh},
+  journal={arXiv preprint arXiv:2310.11511},
+  year={2023}
+}
+
+@article{jiang2023active,
+  title={Active retrieval augmented generation},
+  author={Jiang, Zhengbao and Xu, Frank F and Gao, Luyu and Sun, Zhiqing and Liu, Qian and Dwivedi-Yu, Jane and Yang, Yiming and Callan, Jamie and Neubig, Graham},
+  journal={arXiv preprint arXiv:2305.06983},
+  year={2023}
+}
+
+@article{lin2023ra,
+  title={Ra-dit: Retrieval-augmented dual instruction tuning},
+  author={Lin, Xi Victoria and Chen, Xilun and Chen, Mingda and Shi, Weijia and Lomeli, Maria and James, Rich and Rodriguez, Pedro and Kahn, Jacob and Szilvasy, Gergely and Lewis, Mike and others},
+  journal={arXiv preprint arXiv:2310.01352},
+  year={2023}
+}
+
+@article{zheng2024kun,
+  title={Kun: Answer Polishment for Chinese Self-Alignment with Instruction Back-Translation},
+  author={Zheng, Tianyu and Guo, Shuyue and Qu, Xingwei and Guo, Jiawei and Zhang, Weixu and Du, Xinrun and Lin, Chenghua and Huang, Wenhao and Chen, Wenhu and Fu, Jie and others},
+  journal={arXiv preprint arXiv:2401.06477},
+  year={2024}
+}
+
+@inproceedings{lou2023muffin,
+  title={MUFFIN: Curating Multi-Faceted Instructions for Improving Instruction Following},
+  author={Lou, Renze and Zhang, Kai and Xie, Jian and Sun, Yuxuan and Ahn, Janice and Xu, Hanzi and Su, Yu and Yin, Wenpeng},
+  booktitle={The Twelfth International Conference on Learning Representations},
+  year={2023}
+}
+
+@article{nakano2021webgpt,
+  title={Webgpt: Browser-assisted question-answering with human feedback},
+  author={Nakano, Reiichiro and Hilton, Jacob and Balaji, Suchir and Wu, Jeff and Ouyang, Long and Kim, Christina and Hesse, Christopher and Jain, Shantanu and Kosaraju, Vineet and Saunders, William and others},
+  journal={arXiv preprint arXiv:2112.09332},
+  year={2021}
+}
+
+@inproceedings{
+liu2024what,
+title={What Makes Good Data for Alignment? A Comprehensive Study of Automatic Data Selection in Instruction Tuning},
+author={Wei Liu and Weihao Zeng and Keqing He and Yong Jiang and Junxian He},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=BTKAeLqLMw}
+}
+
+@article{Li2023FromQT,
+  title={From Quantity to Quality: Boosting LLM Performance with Self-Guided Data Selection for Instruction Tuning},
+  author={Ming Li and Yong Zhang and Zhitao Li and Jiuhai Chen and Lichang Chen and Ning Cheng and Jianzong Wang and Tianyi Zhou and Jing Xiao},
+  journal={ArXiv},
+  year={2023},
+  volume={abs/2308.12032},
+  url={https://api.semanticscholar.org/CorpusID:261076515}
+}
+
+@misc{vicuna2023,
+    title = {Vicuna: An Open-Source Chatbot Impressing GPT-4 with 90\%* ChatGPT Quality},
+    url = {https://lmsys.org/blog/2023-03-30-vicuna/},
+    author = {Chiang, Wei-Lin and Li, Zhuohan and Lin, Zi and Sheng, Ying and Wu, Zhanghao and Zhang, Hao and Zheng, Lianmin and Zhuang, Siyuan and Zhuang, Yonghao and Gonzalez, Joseph E. and Stoica, Ion and Xing, Eric P.},
+    month = {March},
+    year = {2023}
+}
+
+@article{Chinese-LLaMA-Alpaca,
+    title={Efficient and Effective Text Encoding for Chinese LLaMA and Alpaca},
+    author={Cui, Yiming and Yang, Ziqing and Yao, Xin},
+    journal={arXiv preprint arXiv:2304.08177},
+    url={https://arxiv.org/abs/2304.08177},
+    year={2023}
+}
+
+@misc{Chinese-Mixtral-8x7B,
+    author = {HIT-SCIR},
+    title = {Chinese-Mixtral-8x7B: An Open-Source Mixture-of-Experts LLM},
+    year = {2024},
+    publisher = {GitHub},
+    journal = {GitHub repository},
+    howpublished = {\url{https://github.com/HIT-SCIR/Chinese-Mixtral-8x7B}}
+}
+
+@misc{li2023cmmlu,
+      title={CMMLU: Measuring massive multitask language understanding in Chinese}, 
+      author={Haonan Li and Yixuan Zhang and Fajri Koto and Yifei Yang and Hai Zhao and Yeyun Gong and Nan Duan and Timothy Baldwin},
+      year={2023},
+      eprint={2306.09212},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+@misc{bard,
+  author = {Google DeepMind},
+  title = {Bard},
+  year = {2023},
+  howpublished = {\url{https://bard.google.com}},
+}
+
+
+@misc{gemini,
+  author = {Google DeepMind},
+  title = {Gemini},
+  year = {2023},
+  howpublished = {\url{https://gemini.google.com}},
+}
+
+@misc{mistral,
+  author = {Mistral-AI},
+  title = {mistral},
+  year = {2023},
+  howpublished = {\url{https://mistral.ai/}},
+}
+
+@misc{wei2023skywork,
+      title={Skywork: A More Open Bilingual Foundation Model}, 
+      author={Tianwen Wei and Liang Zhao and Lichang Zhang and Bo Zhu and Lijie Wang and Haihua Yang and Biye Li and Cheng Cheng and Weiwei Lü and Rui Hu and Chenxia Li and Liu Yang and Xilin Luo and Xuejie Wu and Lunan Liu and Wenjun Cheng and Peng Cheng and Jianhao Zhang and Xiaoyu Zhang and Lei Lin and Xiaokun Wang and Yutuan Ma and Chuanhai Dong and Yanqi Sun and Yifu Chen and Yongyi Peng and Xiaojuan Liang and Shuicheng Yan and Han Fang and Yahui Zhou},
+      year={2023},
+      eprint={2310.19341},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
